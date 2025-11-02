@@ -2,6 +2,7 @@
 
 ## Startup
 Steps described in project specs.
+- [ ] Create the Rails app in the container
 - [ ] Session configuration
 - [ ] CORS configuration
 
