@@ -6,6 +6,79 @@ Steps described in project specs.
 - [ ] Session configuration
 - [ ] CORS configuration
 
+### Initial Setup
+- [ ] (one person only) import starter files from provided zip folders
+- [ ] (the other person) get the general initial setup configured by the first person: `git pull`
+- [ ] ensure Docker Desktop is running on your local host
+- [ ] start the container: `docker-compose up -d`
+- [ ] start Rails bash shell: `docker-compose exec web bash`
+- [ ] (one person only) create new Rails application: `rails new help_desk_backend --api --skip-kamal --skip-thruster  --database=mysql`
+- [ ] navigate to [backend directory](/help_desk_backend/): `cd help_desk_backend` (next few commands must be run in that folder)
+- [ ] (one person only) add required gems to Gemfile
+    ```
+    gem "rack-cors" # For handling Cross-Origin Resource Sharing (CORS) requests from the frontend
+    gem "jwt" # For JSON Web Token authentication (if you choose JWT over sessions)
+    gem "activerecord-session_store" # For database-backed session storage
+    group :test do
+       gem "mocha"
+    end
+    ```
+- [ ] (one person only) add this line to [help_desk_backend/test/test_helper.rb](/help_desk_backend/test/test_helper.rb): `require "mocha/minitest"`
+- [ ] install dependencies: `bundle install`
+- [ ] create the database: `rails db:create`
+- [ ] start server: `rails server -b 0.0.0.0 -p 3000`
+- [ ] access application: `http://localhost:3000`
+- [ ] (one person only) configure database-backed sessions: allows Rails API to maintain user sessions across requests (essential for authentication functionality)
+    - [ ] generate session migration: `rails generate active_record:session_migration`
+    - [ ] run the migration: `rails db:migrate`
+    - [ ] add session middleware in [config/application.rb]
+        ```
+        config.middleware.use ActionDispatch::Cookies
+        config.middleware.use ActionDispatch::Session::ActiveRecordStore, {
+          expire_after: 24.hours,
+          same_site: Rails.env.development? ? :lax : :none,
+          secure: Rails.env.production?
+        }
+        ```
+- [ ] (one person only) configure CORS (`rack-cors` gem) in [config/application.rb]: allows frontend application to make requests to your Rails API when hosted in different domains ([http://localhost:3000](http://localhost:3000) is considered a different domain thatn [http://localhost:5173](http://localhost:5173))
+    ```
+    # Add this inside the Application class
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins [
+            'http://localhost:5173',
+            'http://127.0.0.1:5173',
+        ]
+        resource '*',
+          headers: :any,
+          methods: [:get, :post, :put, :patch, :delete, :options, :head],
+          credentials: true
+      end
+    end
+    ```
+- [ ] (one person) import frontend from [Project 2](https://github.com/laszlo-tw/f25_cmpsc291a_project2)
+- [ ] configure the frontend to point to your Rails backend
+    - [ ] go to [http://localhost:3000/settings](http://localhost:3000/settings)
+    - [ ] change Backend Mode to "API (Real Backend)" & save configuration
+- [ ] ...
+- [ ] stop the container: `docker-compose down`
+- [ ] (the first person) commit & push changes to Github repo
+
+### Daily Workflow
+- [ ] ensure code is up to date: `git pull`
+- [ ] ensure Docker Desktop is running on your local host
+- [ ] start the container: `docker-compose up -d`
+- [ ] start Rails bash shell: `docker-compose exec web bash`
+- [ ] navigate to [backend directory](/help_desk_backend/): `cd help_desk_backend` (next few commands must be run in that folder)
+- [ ] run any migrations if necessary: `rails db:migrate`
+- [ ] start server: `rails server -b 0.0.0.0 -p 3000`
+- [ ] access application: [http://localhost:3000](http://localhost:3000)
+- [ ] configure the frontend to point to your Rails backend
+    - [ ] go to [http://localhost:3000/settings](http://localhost:3000/settings)
+    - [ ] change Backend Mode to "API (Real Backend)" & save configuration
+- [ ] ...
+- [ ] stop the container: `docker-compose down`
+
 ## Project
 **Rails API Application:** Create a Rails API application that implements all endpoints specified in [`API_SPECIFICATION.md`](API_SPECIFICATION.md).
 - [ ] Implement Controllers:
