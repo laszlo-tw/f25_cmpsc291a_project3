@@ -2,9 +2,9 @@
 
 ## Startup
 Steps described in project specs.
-- [ ] Create the Rails app in the container
-- [ ] Session configuration
-- [ ] CORS configuration
+- [x] Create the Rails app in the container
+- [x] Session configuration
+- [x] CORS configuration
 
 ### Initial Setup
 - [x] (one person only) import starter files from provided zip folders
