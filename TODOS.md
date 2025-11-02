@@ -56,10 +56,12 @@ Steps described in project specs.
       end
     end
     ```
-- [ ] (one person) import frontend from [Project 2](https://github.com/laszlo-tw/f25_cmpsc291a_project2)
-- [ ] configure the frontend to point to your Rails backend
-    - [ ] go to [http://localhost:3000/settings](http://localhost:3000/settings)
-    - [ ] change Backend Mode to "API (Real Backend)" & save configuration
+- [ ] start up frontend from [Project 2](https://github.com/laszlo-tw/f25_cmpsc291a_project2): `npm run dev`
+- [ ] access frontend: [http://localhost:5173](http://localhost:5173)
+    - [ ] go to [http://localhost:5173/settings](http://localhost:5173/settings)
+    - [ ] change Backend Mode to "API (Real Backend)"
+    - [ ] set API Base URL to [http://localhost:3000](http://localhost:3000)
+    - [ ] save configuration
 - [ ] ...
 - [ ] stop the container: `docker-compose down`
 - [ ] (the first person) commit & push changes to Github repo
@@ -75,9 +77,13 @@ Note: I had to remove `.git/` in [/help_desk_backend](/help_desk_backend/) in or
 - [ ] run any migrations if necessary: `rails db:migrate`
 - [ ] start server: `rails server -b 0.0.0.0 -p 3000`
 - [ ] access application: [http://localhost:3000](http://localhost:3000)
+- [ ] start up frontend from [Project 2](https://github.com/laszlo-tw/f25_cmpsc291a_project2): `npm run dev`
+- [ ] access frontend: [http://localhost:5173](http://localhost:5173)
 - [ ] configure the frontend to point to your Rails backend
-    - [ ] go to [http://localhost:3000/settings](http://localhost:3000/settings)
-    - [ ] change Backend Mode to "API (Real Backend)" & save configuration
+    - [ ] go to [http://localhost:5173/settings](http://localhost:5173/settings)
+    - [ ] change Backend Mode to "API (Real Backend)"
+    - [ ] set API Base URL to [http://localhost:3000](http://localhost:3000)
+    - [ ] save configuration
 - [ ] ...
 - [ ] stop the container: `docker-compose down`
 
