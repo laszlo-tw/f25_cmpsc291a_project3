@@ -7,7 +7,7 @@ Steps described in project specs.
 - [ ] CORS configuration
 
 ### Initial Setup
-- [ ] (one person only) import starter files from provided zip folders
+- [x] (one person only) import starter files from provided zip folders
 - [ ] (the other person) get the general initial setup configured by the first person: `git pull`
 - [ ] ensure Docker Desktop is running on your local host
 - [ ] start the container: `docker-compose up -d`
