@@ -168,33 +168,31 @@ class MessageTest < ActiveSupport::TestCase
     assert_not_nil @conversation.last_message_at
   end
 
-  # uncomment after ExpertAssignment model is implemented
-  # test "destroying conversation destroys messages" do
-  #   message = Message.create!(
-  #     conversation: @conversation,
-  #     sender: @initiator,
-  #     sender_role: "initiator",
-  #     content: "Test"
-  #   )
+  test "destroying conversation destroys messages" do
+    message = Message.create!(
+      conversation: @conversation,
+      sender: @initiator,
+      sender_role: "initiator",
+      content: "Test"
+    )
     
-  #   message_id = message.id
-  #   @conversation.destroy
+    message_id = message.id
+    @conversation.destroy
     
-  #   assert_nil Message.find_by(id: message_id)
-  # end
+    assert_nil Message.find_by(id: message_id)
+  end
 
-  # uncomment after ExpertAssignment model is implemented
-  # test "destroying sender destroys messages" do
-  #   message = Message.create!(
-  #     conversation: @conversation,
-  #     sender: @initiator,
-  #     sender_role: "initiator",
-  #     content: "Test"
-  #   )
+  test "destroying sender destroys messages" do
+    message = Message.create!(
+      conversation: @conversation,
+      sender: @initiator,
+      sender_role: "initiator",
+      content: "Test"
+    )
     
-  #   message_id = message.id
-  #   @initiator.destroy
+    message_id = message.id
+    @initiator.destroy
     
-  #   assert_nil Message.find_by(id: message_id)
-  # end
+    assert_nil Message.find_by(id: message_id)
+  end
 end

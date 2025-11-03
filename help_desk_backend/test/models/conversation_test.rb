@@ -168,16 +168,15 @@ class ConversationTest < ActiveSupport::TestCase
       initiator: @initiator
     )
     
-    # We'll uncomment this after creating ExpertAssignment model
-    # assignment = ExpertAssignment.create!(
-    #   conversation: conversation,
-    #   expert: @expert
-    # )
-    # assignment_id = assignment.id
+    assignment = ExpertAssignment.create!(
+      conversation: conversation,
+      expert: @expert
+    )
+    assignment_id = assignment.id
     
-    # conversation.destroy
+    conversation.destroy
     
-    # assert_nil ExpertAssignment.find_by(id: assignment_id)
+    assert_nil ExpertAssignment.find_by(id: assignment_id)
   end
 
   test "belongs to initiator" do

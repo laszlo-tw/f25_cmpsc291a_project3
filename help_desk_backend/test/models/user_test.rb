@@ -151,10 +151,9 @@ class UserTest < ActiveSupport::TestCase
     assert_not user.expert?
   end
   
-  # Uncomment this test after creating ExpertProfile model
-  # test "expert? returns true when user has expert profile" do
-  #   user = User.create!(username: "expert", password: "password123")
-  #   user.create_expert_profile(bio: "I'm an expert")
-  #   assert user.expert?
-  # end
+  test "expert? returns true when user has expert profile" do
+    user = User.create!(username: "expert", password: "password123")
+    user.create_expert_profile(bio: "I'm an expert")
+    assert user.expert?
+  end
 end
