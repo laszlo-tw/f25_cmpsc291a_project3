@@ -3,3 +3,6 @@
 
 # Ignore whatever this is
 .local/
+
+# Ignore this please
+.bash_history
