@@ -8,9 +8,14 @@ class User < ApplicationRecord
         # enable efficient navigation between related data
     has_many    :conversations_as_initiator,            # name the relationship using Ruby convention
                 class_name: 'Conversation',             # designate where it points to
-                foreign_key: 'initiator_id'             # designate the column
+                foreign_key: 'initiator_id',            # designate the column
+                dependent:  :destroy
+    has_many    :conversations_as_expert,
+                class_name: 'Conversation',
+                foreign_key: 'assigned_expert_id',
+                dependent: :nullify
     has_many    :messages, foreign_key: 'sender_id'
-    has_one     :expert_profile
+    has_one     :expert_profile, dependent: :destroy
 
     # validations
         # check if data meets requirements before allowing it into the database

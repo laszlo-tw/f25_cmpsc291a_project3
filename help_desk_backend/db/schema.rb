@@ -10,7 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_02_220715) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_03_040650) do
+  create_table "conversations", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "assigned_expert_id"
+    t.datetime "created_at", null: false
+    t.bigint "initiator_id", null: false
+    t.datetime "last_message_at"
+    t.string "status", default: "waiting", null: false
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.index ["assigned_expert_id"], name: "index_conversations_on_assigned_expert_id"
+    t.index ["initiator_id"], name: "index_conversations_on_initiator_id"
+    t.index ["status"], name: "index_conversations_on_status"
+  end
+
   create_table "sessions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "data"
@@ -28,4 +41,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_02_220715) do
     t.string "username", null: false
     t.index ["username"], name: "index_users_on_username", unique: true
   end
+
+  add_foreign_key "conversations", "users", column: "assigned_expert_id", on_delete: :nullify
+  add_foreign_key "conversations", "users", column: "initiator_id", on_delete: :cascade
 end
