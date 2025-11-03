@@ -149,16 +149,17 @@ class ConversationTest < ActiveSupport::TestCase
     )
     
     # We'll uncomment this after creating Message model
-    # message = Message.create!(
-    #   conversation: conversation,
-    #   sender: @initiator,
-    #   content: "Test message"
-    # )
-    # message_id = message.id
+    message = Message.create!(
+      conversation: conversation,
+      sender: @initiator,
+      sender_role: "initiator",
+      content: "Test message"
+    )
+    message_id = message.id
     
-    # conversation.destroy
+    conversation.destroy
     
-    # assert_nil Message.find_by(id: message_id)
+    assert_nil Message.find_by(id: message_id)
   end
 
   test "destroying conversation destroys associated expert_assignments" do
@@ -167,16 +168,15 @@ class ConversationTest < ActiveSupport::TestCase
       initiator: @initiator
     )
     
-    # We'll uncomment this after creating ExpertAssignment model
-    # assignment = ExpertAssignment.create!(
-    #   conversation: conversation,
-    #   expert: @expert
-    # )
-    # assignment_id = assignment.id
+    assignment = ExpertAssignment.create!(
+      conversation: conversation,
+      expert: @expert
+    )
+    assignment_id = assignment.id
     
-    # conversation.destroy
+    conversation.destroy
     
-    # assert_nil ExpertAssignment.find_by(id: assignment_id)
+    assert_nil ExpertAssignment.find_by(id: assignment_id)
   end
 
   test "belongs to initiator" do

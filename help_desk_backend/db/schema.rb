@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_03_040650) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_03_065506) do
   create_table "conversations", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "assigned_expert_id"
     t.datetime "created_at", null: false
@@ -22,6 +22,41 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_03_040650) do
     t.index ["assigned_expert_id"], name: "index_conversations_on_assigned_expert_id"
     t.index ["initiator_id"], name: "index_conversations_on_initiator_id"
     t.index ["status"], name: "index_conversations_on_status"
+  end
+
+  create_table "expert_assignments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.datetime "assigned_at", null: false
+    t.bigint "conversation_id", null: false
+    t.datetime "created_at", null: false
+    t.bigint "expert_id", null: false
+    t.datetime "resolved_at"
+    t.string "status", default: "active", null: false
+    t.datetime "updated_at", null: false
+    t.index ["conversation_id"], name: "index_expert_assignments_on_conversation_id"
+    t.index ["expert_id", "status"], name: "index_expert_assignments_on_expert_id_and_status"
+    t.index ["expert_id"], name: "index_expert_assignments_on_expert_id"
+  end
+
+  create_table "expert_profiles", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.text "bio"
+    t.datetime "created_at", null: false
+    t.json "knowledge_base_links"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_expert_profiles_on_user_id", unique: true
+  end
+
+  create_table "messages", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.text "content", null: false
+    t.bigint "conversation_id", null: false
+    t.datetime "created_at", null: false
+    t.boolean "is_read", default: false, null: false
+    t.bigint "sender_id", null: false
+    t.string "sender_role", null: false
+    t.datetime "updated_at", null: false
+    t.index ["conversation_id", "created_at"], name: "index_messages_on_conversation_id_and_created_at"
+    t.index ["conversation_id"], name: "index_messages_on_conversation_id"
+    t.index ["sender_id"], name: "index_messages_on_sender_id"
   end
 
   create_table "sessions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -44,4 +79,9 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_03_040650) do
 
   add_foreign_key "conversations", "users", column: "assigned_expert_id", on_delete: :nullify
   add_foreign_key "conversations", "users", column: "initiator_id", on_delete: :cascade
+  add_foreign_key "expert_assignments", "conversations", on_delete: :cascade
+  add_foreign_key "expert_assignments", "users", column: "expert_id", on_delete: :cascade
+  add_foreign_key "expert_profiles", "users", on_delete: :cascade
+  add_foreign_key "messages", "conversations", on_delete: :cascade
+  add_foreign_key "messages", "users", column: "sender_id", on_delete: :cascade
 end
