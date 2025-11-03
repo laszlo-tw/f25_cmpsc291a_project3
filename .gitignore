@@ -6,3 +6,6 @@
 
 # Ignore this please
 .bash_history
+
+# This too
+.irb_history
