@@ -96,12 +96,12 @@ Note: I had to remove `.git/` in [/help_desk_backend](/help_desk_backend/) in or
     - [ ] HealthController: No authentication necessary
     - [ ] UpdatesController: Uses JWT for token-based authentication
     - [ ] ExpertController: Uses JWT for token-based authentication
-- [ ] Implement Models:
-    - [ ] User
-    - [ ] Message
-    - [ ] Conversation
-    - [ ] ExpertAssignment
-    - [ ] ExpertProfile
+- [x] Implement Models:
+    - [x] User
+    - [x] Message
+    - [x] Conversation
+    - [x] ExpertAssignment
+    - [x] ExpertProfile
 - [ ] Implement tests:
     - [ ] use the example test files provided in the starter package to test AuthController and ConversationsController
     - [ ] write additional tests following the same structure for other controllers to confirm that our code is working without needing to integrate with the frontend
@@ -127,10 +127,10 @@ Note: I had to remove `.git/` in [/help_desk_backend](/help_desk_backend/) in or
 ## Suggested Implementation Strategy
 - [ ] Create a Git repository
 - [ ] Get the server running in the Docker environment
-- [ ] Add the User model
-    - [ ] add db migration
-    - [ ] creation of ActiveRecord model file
-    - [ ] add any tests for the User model
+- [x] Add the User model
+    - [x] add db migration
+    - [x] creation of ActiveRecord model file
+    - [x] add any tests for the User model
 - [ ] Add the UsersController with a registration action
     - [ ] add the Users Controller file
     - [ ] add an action to the Users Controller file for registering a new user
