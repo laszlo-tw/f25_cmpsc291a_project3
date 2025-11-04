@@ -29,9 +29,6 @@ module HelpDeskBackend
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
-    # JwtService
-    config.autoload_paths += %W(#{config.root}/lib)
-
     # Added during Project "Session Configuration"
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::ActiveRecordStore, {
