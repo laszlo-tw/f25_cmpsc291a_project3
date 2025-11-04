@@ -29,12 +29,20 @@ module HelpDeskBackend
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
+    # cookie_configuration_test.rb expects:
+        # Development: samesite=lax, secure=false
+        # Test: samesite=none, secure=false
+        # Production: samesite=none, secure=true
+    same_site_value = Rails.env.development? ? :lax : :none
+    secure_value = Rails.env.production?
+
     # Added during Project "Session Configuration"
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::ActiveRecordStore, {
       expire_after: 24.hours,
       same_site: Rails.env.development? ? :lax : :none,
-      secure: Rails.env.production?
+      secure: Rails.env.production?,
+      httponly: true # added for cookie_configuration_test.rb: assert_includes set_cookie_header, "httponly"
     }
 
     # Added during Project "CORS Configuration"
