@@ -12,7 +12,7 @@ Run in rails bash shell from `help_desk_backend/`
 - `rails test test/models/message_test.rb`
 - `rails test test/models/expert_profile_test.rb`
 - `rails test test/models/expert_assignment_test.rb`
-`rails console`
+- manual: `rails console`
 
 ## Controllers
 - `rails test test/controllers/health_controller_test.rb`
@@ -21,4 +21,4 @@ Run in rails bash shell from `help_desk_backend/`
 - `rails test test/controllers/messages_controller_test.rb`
 - `rails test test/controllers/expert_controller_test.rb`
 - `rails test test/controllers/updates_controller_test.rb`
-`curl` commands
+- manual: `curl` commands
