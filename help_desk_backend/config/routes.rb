@@ -16,6 +16,11 @@ Rails.application.routes.draw do
   get '/conversations/:id', to: 'conversations#show'
   post '/conversations', to: 'conversations#create'
 
+  # messages routes
+  get 'conversations/:conversation_id/messages', to: 'messages#index'
+  post '/messages', to: 'messages#create'
+  put '/messages/:id/read', to: 'messages#mark_read'
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
