@@ -1,6 +1,6 @@
 class HealthController < ApplicationController
     # no authentication needed for health check
-    skip_before_action :verify_authenticity_token, only: [:check]
+    # skip_before_action :verify_authenticity_token, only: [:check]
 
     def check
         render json: {
