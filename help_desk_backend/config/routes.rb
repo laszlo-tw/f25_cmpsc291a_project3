@@ -16,6 +16,20 @@ Rails.application.routes.draw do
   get '/conversations/:id', to: 'conversations#show'
   post '/conversations', to: 'conversations#create'
 
+  # messages routes
+  get '/conversations/:conversation_id/messages', to: 'messages#index'
+  post '/messages', to: 'messages#create'
+  put '/messages/:id/read', to: 'messages#mark_read'
+
+  # expert routes
+  get '/expert/queue', to: 'expert#queue'
+  get '/expert/profile', to: 'expert#profile'
+  put '/expert/profile', to: 'expert#update_profile'
+  get '/expert/assignments/history', to: 'expert#assignments_history'
+
+  post '/expert/conversations/:conversation_id/claim', to: 'expert#claim'
+  post '/expert/conversations/:conversation_id/unclaim', to: 'expert#unclaim'
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

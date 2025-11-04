@@ -1,6 +1,5 @@
 class ConversationsController < ApplicationController
     before_action :require_authentication
-    before_action :set_conversation, only: [:show]
 
     # GET /conversations
     def index
@@ -14,7 +13,19 @@ class ConversationsController < ApplicationController
 
     # GET /conversations/:id
     def show
-        render json: conversation_response(@conversation), status: :ok
+        # users can only see their own conversations
+        conversation = Conversation.where(initiator_id: current_user.id)
+                        .or(Conversation.where(assigned_expert_id: current_user.id))
+                        .find_by(id: params[:id])
+
+        unless conversation # if conversation not found
+            render json: {
+                error: 'Conversation not found'
+            }, status: :not_found
+            return
+        end
+
+        render json: conversation_response(conversation), status: :ok
     end
 
     # POST /conversations
@@ -31,17 +42,6 @@ class ConversationsController < ApplicationController
     end
 
     private
-
-    def set_conversation
-        @conversation = Conversation.where(initiator_id: current_user.id)
-                        .or(Conversation.where(assigned_expert_id: current_user.id))
-                        .find_by(id: params[:id])
-
-        render json: {
-            error: 'Conversation not found'
-        }, status: :not_found unless @conversation
-        # users can only see their own conversations
-    end
 
     def conversation_params
         params.permit(:title)

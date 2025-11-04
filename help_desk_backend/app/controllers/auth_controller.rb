@@ -9,7 +9,8 @@ class AuthController < ApplicationController
 
         if user.save
             # auto-create expert profile for all new users
-            user.create_expert_profile(bio: "", knowledge_base_links: [])
+            # user.create_expert_profile(bio: "", knowledge_base_links: [])
+            #  ^ moved to User model
 
             user.update_last_active!
             token = JwtService.encode(user)
