@@ -39,7 +39,8 @@ class User < ApplicationRecord
     # instance methods
     def update_last_active!     # exclamation mark is bang operator -- convention that indicates a "dangerous method" 
                                 # that modifies the object it's called on
-        update(last_active_at: Time.current)
+        # update(last_active_at: Time.current)
+        touch(:last_active_at)
     end
 
     def expert?
