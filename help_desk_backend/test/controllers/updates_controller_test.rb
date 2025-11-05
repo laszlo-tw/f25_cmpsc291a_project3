@@ -56,27 +56,33 @@ class UpdatesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "GET /api/conversations/updates filters by since timestamp" do
-    # Create old conversation
+    # Update setup conversation to be old
+    @conversation.update_column(:updated_at, 3.hours.ago)
+    
+    # Create old conversation with explicit timestamp
     old_conv = Conversation.create!(
       title: "Old Conversation",
       initiator: @user,
-      status: "waiting",
-      updated_at: 2.hours.ago
+      status: "waiting"
     )
+    old_conv.update_column(:updated_at, 2.hours.ago)
+    
+    # Mark boundary
+    since_time = 1.hour.ago
+    
+    # Small delay to ensure timestamp difference
+    sleep 0.01
     
     # Create new conversation
     new_conv = Conversation.create!(
       title: "New Conversation",
       initiator: @user,
-      status: "waiting",
-      updated_at: 5.minutes.ago
+      status: "waiting"
     )
     
-    # Request updates since 1 hour ago
-    since_time = 1.hour.ago.iso8601
-    
+    # Request updates since boundary
     get "/api/conversations/updates",
-        params: { userId: @user.id, since: since_time },
+        params: { userId: @user.id, since: since_time.iso8601 },
         headers: { "Authorization" => "Bearer #{@token}" }
     
     assert_response :ok
@@ -158,29 +164,35 @@ class UpdatesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "GET /api/messages/updates filters by since timestamp" do
-    # Create old message
+    # Update setup message to be old
+    @message.update_column(:created_at, 3.hours.ago)
+    
+    # Create old message with explicit timestamp
     old_message = Message.create!(
       conversation: @conversation,
       sender: @user,
       sender_role: "initiator",
-      content: "Old message",
-      created_at: 2.hours.ago
+      content: "Old message"
     )
+    old_message.update_column(:created_at, 2.hours.ago)
+    
+    # Mark boundary
+    since_time = 1.hour.ago
+    
+    # Small delay
+    sleep 0.01
     
     # Create new message
     new_message = Message.create!(
       conversation: @conversation,
       sender: @user,
       sender_role: "initiator",
-      content: "New message",
-      created_at: 5.minutes.ago
+      content: "New message"
     )
     
-    # Request updates since 1 hour ago
-    since_time = 1.hour.ago.iso8601
-    
+    # Request updates since boundary
     get "/api/messages/updates",
-        params: { userId: @user.id, since: since_time },
+        params: { userId: @user.id, since: since_time.iso8601 },
         headers: { "Authorization" => "Bearer #{@token}" }
     
     assert_response :ok
@@ -192,21 +204,24 @@ class UpdatesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "GET /api/messages/updates returns messages in chronological order" do
+    # Use update_column to set explicit timestamps
+    @message.update_column(:created_at, 15.minutes.ago)
+    
     message2 = Message.create!(
       conversation: @conversation,
       sender: @user,
       sender_role: "initiator",
-      content: "Second message",
-      created_at: 10.minutes.ago
+      content: "Second message"
     )
+    message2.update_column(:created_at, 10.minutes.ago)
     
     message3 = Message.create!(
       conversation: @conversation,
       sender: @user,
       sender_role: "initiator",
-      content: "Third message",
-      created_at: 5.minutes.ago
+      content: "Third message"
     )
+    message3.update_column(:created_at, 5.minutes.ago)
     
     get "/api/messages/updates",
         params: { userId: @user.id },
@@ -271,14 +286,14 @@ class UpdatesControllerTest < ActionDispatch::IntegrationTest
       assigned_expert: @expert
     )
     
-    # Don't send 'since' parameter for this test
     get "/api/expert-queue/updates",
-        params: { expertId: @expert.id },  # No 'since' parameter
+        params: { expertId: @expert.id },
         headers: { "Authorization" => "Bearer #{@expert_token}" }
     
     assert_response :ok
     json_response = JSON.parse(response.body)
     
+    # Response is an array with one object containing both queues
     assert_equal 1, json_response.length
     assert_not_nil json_response[0]["waitingConversations"]
     assert_not_nil json_response[0]["assignedConversations"]
@@ -302,10 +317,9 @@ class UpdatesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "GET /api/expert-queue/updates requires expert profile" do
-    # Create user without expert profile (though all users get one now)
-    # This test validates the check is in place
+    # Create user and destroy expert profile
     non_expert = User.create!(username: "nonexpert", password: "password123")
-    non_expert.expert_profile.destroy
+    ExpertProfile.find_by(user_id: non_expert.id)&.destroy
     non_expert_token = JwtService.encode(non_expert)
     
     get "/api/expert-queue/updates",
@@ -315,39 +329,43 @@ class UpdatesControllerTest < ActionDispatch::IntegrationTest
     assert_response :forbidden
   end
 
-  test "GET /api/conversations/updates filters by since timestamp" do
-    # Create old conversation with explicit timestamp
-    old_conv = Conversation.create!(
-      title: "Old Conversation",
+  test "GET /api/expert-queue/updates filters by since timestamp" do
+    # Update setup conversation to be old
+    @conversation.update_column(:updated_at, 3.hours.ago)
+    
+    # Create old waiting conversation
+    old_waiting = Conversation.create!(
+      title: "Old Waiting",
       initiator: @user,
       status: "waiting"
     )
-    old_conv.update_column(:updated_at, 2.hours.ago)  # Force old timestamp
+    old_waiting.update_column(:updated_at, 2.hours.ago)
     
-    # Mark a clear boundary
+    # Mark boundary
     since_time = 1.hour.ago
     
-    # Wait a moment to ensure different timestamp
+    # Small delay
     sleep 0.01
     
-    # Create new conversation
-    new_conv = Conversation.create!(
-      title: "New Conversation",
+    # Create new waiting conversation
+    new_waiting = Conversation.create!(
+      title: "New Waiting",
       initiator: @user,
       status: "waiting"
     )
     
-    # Request updates since boundary
-    get "/api/conversations/updates",
-        params: { userId: @user.id, since: since_time.iso8601 },
-        headers: { "Authorization" => "Bearer #{@token}" }
+    get "/api/expert-queue/updates",
+        params: { expertId: @expert.id, since: since_time.iso8601 },
+        headers: { "Authorization" => "Bearer #{@expert_token}" }
     
     assert_response :ok
     json_response = JSON.parse(response.body)
     
+    waiting_conversations = json_response[0]["waitingConversations"]
+    
     # Should only get new conversation
-    assert_equal 1, json_response.length
-    assert_equal new_conv.id.to_s, json_response[0]["id"]
+    assert_equal 1, waiting_conversations.length
+    assert_equal new_waiting.id.to_s, waiting_conversations[0]["id"]
   end
 
   test "GET /api/expert-queue/updates returns bad request for invalid timestamp" do
@@ -392,6 +410,7 @@ class UpdatesControllerTest < ActionDispatch::IntegrationTest
         params: { userId: @user.id },
         headers: { "Authorization" => "Bearer #{@token}" }
     
+    assert_response :ok
     json_response = JSON.parse(response.body).first
     
     assert_not_nil json_response["id"]
@@ -408,6 +427,7 @@ class UpdatesControllerTest < ActionDispatch::IntegrationTest
         params: { userId: @user.id },
         headers: { "Authorization" => "Bearer #{@token}" }
     
+    assert_response :ok
     json_response = JSON.parse(response.body).first
     
     assert_not_nil json_response["id"]
