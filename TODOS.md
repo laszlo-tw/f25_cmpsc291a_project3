@@ -64,7 +64,7 @@ Steps described in project specs.
     - [ ] save configuration
 - [ ] ...
 - [ ] stop the container: `docker-compose down`
-- [ ] (the first person) commit & push changes to Github repo
+- [x] (the first person) commit & push changes to Github repo
 
 Note: I had to remove `.git/` in [/help_desk_backend](/help_desk_backend/) in order for Git to work in the main project directory.
 
@@ -138,3 +138,29 @@ Note: I had to remove `.git/` in [/help_desk_backend](/help_desk_backend/) in or
     - [ ] add tests of the user registration controller action
 - [ ] ...
 - [ ] Consider when we want to implement authentication/authorization (before or after implementing API functionality? pros and cons?)
+
+## Implementation Notes
+- Model implementation
+    - Generate **Model** with `rails generate model` command
+        - Auto-generates migration file in `db/migrate/`, model file in `app/models/`, and test file in `test/models/`
+    - Modify **Migration** file in `db/migrate/`
+        - Apply column constraints such as `null:false` and `default: `
+        - Define relationships between databases by configuring **Foreign Keys** with `add_foreign_key` (there are other ways to do this too that Zach covered in class, but this is what I did)
+        - Add indexes with `add_index` to (1) enforce uniqueness on **Unique Keys** with `unique: true` and (2) optimize future querying/filtering (requires some forethought -- what do you anticipate querying/filtering in your Controller logic?)
+        - Run the migration with `rails db:migrate`
+    - Set up the **Model** in the model file in `app/models/`
+        - Define relationships between relationships by configuring **Associations** with `belongs_to` (references `foreign_key:`) and `has_one`/`has_many`. This corresponds to the lines connecting the tables in the provided er diagram.
+        - Check that data meets requirements before being added to database by configuring **Validations** with `validates` (in particular, `presence: true` for non-nullable columns, `uniqueness:` for **Unique Keys**, and `inclusion: { in: %w[ ] }` for the status columns where only certain "enum" values are allowed).
+        - Define any **Callbacks** and **Instance Methods** to run functions at certain points in the process.
+    - Write and run Model tests in the test file in `test/models/`
+        - Note: had to comment out the default **Fixtures** in `test/fixtures/` because they were unnecessary and causing errors.
+    - Manual tests in **Console** with `rails console`
+- **Controller** implementation
+    - - Generate **Model** with `rails generate controller` command
+        - Auto-generates controller file in `app/controllers/` and test file in `test/controllers/`
+    - Set up the **Controller** in the controller file in `app/controllers/`
+        - Define a method for each route according to the [API Specifications](/API_SPECIFICATION.md). It should interacting with your database model and providing a response via `render json:` with the appropriate `status:`. Can also define any helper functions needed.
+        - Update `app/config/routes.rb` with the newly defined routes.
+        - Write and run Controller tests in the test file in `test/controllers/`
+        - Manual tests with `curl` commands
+        - Note: one-time implementation of JWT token authentication in `app/controllers/application_controller.rb` using the provided `JwtService` function in `app/services/jwt_service.rb`
