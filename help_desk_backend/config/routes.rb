@@ -30,6 +30,11 @@ Rails.application.routes.draw do
   post '/expert/conversations/:conversation_id/claim', to: 'expert#claim'
   post '/expert/conversations/:conversation_id/unclaim', to: 'expert#unclaim'
 
+  # updates/polling routes
+  get '/api/conversations/updates', to: 'updates#conversations'
+  get '/api/messages/updates', to: 'updates#messages'
+  get '/api/expert-queue/updates', to: 'updates#expert_queue'
+  
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
