@@ -59,7 +59,7 @@ class UpdatesController < ApplicationController
         if since.present?
             begin
                 since_time = Time.iso8601(since)
-                user_messages = user_messages.where('updated_at > ?', since_time)
+                user_messages = user_messages.where('created_at > ?', since_time)
             rescue ArgumentError
                 render json: {
                     error: 'Invalid timestamp format'
@@ -77,7 +77,7 @@ class UpdatesController < ApplicationController
     # GET /api/expert-queue/updates
     def expert_queue
         expert_id = params[:expertId]
-        since = params[:expertId]
+        since = params[:since]
 
         # user can only request their own updates
         unless current_user.id.to_s == expert_id
@@ -117,8 +117,8 @@ class UpdatesController < ApplicationController
         assigned = assigned_conversations.order(last_message_at: :desc)
 
         render json: [{
-            waiting: waiting.map {|c| conversation_response(c) },
-            assigned: assigned.map {|c| conversation_response(c) }
+            waitingConversations: waiting.map {|c| conversation_response(c) },
+            assignedConversations: assigned.map {|c| conversation_response(c) }
         }], status: :ok
     
     end
@@ -146,11 +146,9 @@ class UpdatesController < ApplicationController
         # messages not sent by current user and not read
         conversation.messages
                     .where.not(sender_id: current_user.id)
-                    .where(is_read:false)
+                    .where(is_read: false)
                     .count
     end
-
-    private
 
     def message_response(message)
         {
