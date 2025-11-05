@@ -3,14 +3,14 @@ Our implementation of UCSB Fall 2025 CMPSC 291A "Scalable Internet Services" Pro
 
 ## Start Rails backend server
 - Ensure Docker Desktop is running
-- Start Docker container: run `docker-compose up -d`
-- Start Rails bash shell: run `docker-compose exec web bash`
-- Navigate to [/help_desk_backend](/help_desk_backend/) directory: run `cd help_desk_backend`
+- Start Docker container: `docker-compose up -d`
+- Start Rails bash shell: `docker-compose exec web bash`
+- Navigate to [/help_desk_backend](/help_desk_backend/) directory: `cd help_desk_backend`
 - First time:
     - Install dependencies: `bundle install`
     - Create database: `rails db:create`
     - Run database migrations: `rails db:migrate`
-- Start server: From [/help_desk_backend](/help_desk_backend/), run `rails server -b 0.0.0.0 -p 3000`
+- Start server: From [/help_desk_backend](/help_desk_backend/), `rails server -b 0.0.0.0 -p 3000`
 - Access backend: [http://localhost:3000](http://localhost:3000)
 
 ## Start React/Typescript frontend
