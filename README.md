@@ -24,7 +24,7 @@ Our implementation of UCSB Fall 2025 CMPSC 291A "Scalable Internet Services" Pro
     - Save configuration
  
 ## Testing
-- See (TESTS.md)[/TESTS.md]
+- See [TESTS.md](/TESTS.md)
  
 ## Cleanup
 - Stop the Docker container: `docker-compose down`
