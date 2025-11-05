@@ -23,5 +23,8 @@ Our implementation of UCSB Fall 2025 CMPSC 291A "Scalable Internet Services" Pro
     - Set API Base URL to [http://localhost:3000](http://localhost:3000)
     - Save configuration
  
+## Testing
+- See (TESTS.md)[/TESTS.md]
+ 
 ## Cleanup
 - Stop the Docker container: `docker-compose down`
