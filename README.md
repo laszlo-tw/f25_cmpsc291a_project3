@@ -25,6 +25,16 @@ Our implementation of UCSB Fall 2025 CMPSC 291A "Scalable Internet Services" Pro
  
 ## Testing
 - See [TESTS.md](/TESTS.md)
+
+## Reset the Database
+```
+rails db:reset
+```
+or, equivalently:
+```
+rails db:drop
+rails db:setup
+```
  
 ## Cleanup
 - Stop the Docker container: `docker-compose down`
