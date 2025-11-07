@@ -1,7 +1,7 @@
 class AuthController < ApplicationController
 
     # skip_before_action      :verify_authenticity_token
-    before_action           :require_authentication, only: [:refresh, :me]
+    before_action           :require_authentication, only: [:me]
 
     # POST /auth/register
     def register
@@ -9,8 +9,8 @@ class AuthController < ApplicationController
 
         if user.save
             # auto-create expert profile for all new users
-            # user.create_expert_profile(bio: "", knowledge_base_links: [])
-            #  ^ moved to User model
+            user.create_expert_profile(bio: "", knowledge_base_links: [])
+            #  ^ moved back from User model
 
             user.update_last_active!
             token = JwtService.encode(user)

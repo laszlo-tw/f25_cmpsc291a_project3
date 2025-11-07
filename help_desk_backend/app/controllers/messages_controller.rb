@@ -5,9 +5,12 @@ class MessagesController < ApplicationController
     # GET /conversations/:conversation_id/messages
     def index
         # users can only see their own conversations
-        conversation = Conversation.where(initiator_id: current_user.id)
-                        .or(Conversation.where(assigned_expert_id: current_user.id))
-                        .find_by(id: params[:conversation_id])
+        # conversation = Conversation.where(initiator_id: current_user.id)
+        #                 .or(Conversation.where(assigned_expert_id: current_user.id))
+        #                 .find_by(id: params[:conversation_id])
+        
+        # just kidding -- see Piazza post @65
+        conversation = Conversation.find_by(id: params[:conversation_id])
 
         unless conversation # conversation not found
             render json: {

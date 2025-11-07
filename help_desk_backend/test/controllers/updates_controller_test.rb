@@ -8,6 +8,7 @@ class UpdatesControllerTest < ActionDispatch::IntegrationTest
   def setup
     @user = User.create!(username: "testuser", password: "password123")
     @expert = User.create!(username: "expertuser", password: "password123")
+    @expert.create_expert_profile(bio: "I'm an expert")
     @token = JwtService.encode(@user)
     @expert_token = JwtService.encode(@expert)
     

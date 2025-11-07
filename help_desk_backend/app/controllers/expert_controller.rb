@@ -108,7 +108,7 @@ class ExpertController < ApplicationController
     def update_profile
         profile = current_user.expert_profile
 
-        if profile.update(profile_params)
+        if profile.update(bio: params[:bio], knowledge_base_links: params[:knowledgeBaseLinks])
             render json: expert_profile_response(profile), status: :ok
         else
             render json: {

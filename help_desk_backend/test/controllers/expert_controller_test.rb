@@ -7,12 +7,10 @@ require "test_helper"
 class ExpertControllerTest < ActionDispatch::IntegrationTest
   def setup
     @expert = User.create!(username: "expert", password: "password123")
-    @expert.reload # auto-generate expert profile
-    @expert_profile = @expert.expert_profile  # Already created on registration
+    @expert_profile = @expert.create_expert_profile(bio: "I'm an expert")
     @expert_token = JwtService.encode(@expert)
     
     @user = User.create!(username: "user", password: "password123")
-    @user.reload
     @user_token = JwtService.encode(@user)
     
     @waiting_conversation = Conversation.create!(
@@ -147,6 +145,7 @@ class ExpertControllerTest < ActionDispatch::IntegrationTest
 
   test "POST /expert/conversations/:id/claim fails if already assigned" do
     other_expert = User.create!(username: "other_expert", password: "password123")
+    other_expert.create_expert_profile(bio: "I'm an expert")
     @waiting_conversation.assign_expert(other_expert)
     
     post "/expert/conversations/#{@waiting_conversation.id}/claim",
@@ -202,6 +201,7 @@ class ExpertControllerTest < ActionDispatch::IntegrationTest
 
   test "POST /expert/conversations/:id/unclaim fails if not assigned to user" do
     other_expert = User.create!(username: "other_expert", password: "password123")
+    other_expert.create_expert_profile(bio: "I'm an expert")
     @waiting_conversation.assign_expert(other_expert)
     
     post "/expert/conversations/#{@waiting_conversation.id}/unclaim",
