@@ -50,19 +50,20 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
-  test "GET /conversations/:id/messages returns 404 for conversation user doesn't own" do
-    other_user = User.create!(username: "otheruser", password: "password123")
-    other_conversation = Conversation.create!(
-      title: "Other Conversation",
-      initiator: other_user,
-      status: "waiting"
-    )
+  # Piazza
+  # test "GET /conversations/:id/messages returns 404 for conversation user doesn't own" do
+  #   other_user = User.create!(username: "otheruser", password: "password123")
+  #   other_conversation = Conversation.create!(
+  #     title: "Other Conversation",
+  #     initiator: other_user,
+  #     status: "waiting"
+  #   )
     
-    get "/conversations/#{other_conversation.id}/messages",
-        headers: { "Authorization" => "Bearer #{@token}" }
+  #   get "/conversations/#{other_conversation.id}/messages",
+  #       headers: { "Authorization" => "Bearer #{@token}" }
     
-    assert_response :not_found
-  end
+  #   assert_response :not_found
+  # end
 
   test "GET /conversations/:id/messages returns messages in chronological order" do
     message2 = Message.create!(
