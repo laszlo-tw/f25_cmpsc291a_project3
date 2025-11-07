@@ -35,12 +35,12 @@ class User < ApplicationRecord
 
     # callbacks
     before_save :downcase_username
-    after_create :auto_expert_profile
+    # after_create :auto_expert_profile         # commenting out -- occurs on register, not user create
 
-    # instance methods
-    def auto_expert_profile
-        create_expert_profile!(bio: "", knowledge_base_links: []) unless expert_profile
-    end
+    # # instance methods
+    # def auto_expert_profile                   # commenting out -- occurs on register, not user create
+    #     create_expert_profile!(bio: "", knowledge_base_links: []) unless expert_profile
+    # end
 
     def update_last_active!     # exclamation mark is bang operator -- convention that indicates a "dangerous method" 
                                 # that modifies the object it's called on
